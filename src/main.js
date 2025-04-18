@@ -40,6 +40,8 @@ const renderBoard = () => {
     </div>
     <div id="board">
     </div>`;
+
+  document.querySelector("#board").addEventListener("click", clickBoardHandler);
 };
 
 const renderCells = () => {
@@ -50,7 +52,7 @@ const renderCells = () => {
       const cell = document.createElement("div");
       cell.textContent = board[i][j];
       cell.setAttribute("row", i);
-      cell.setAttribute("line", j);
+      cell.setAttribute("col", j);
       if (board[i][j] !== "") {
         cell.style.cursor = "not-allowed";
       }
@@ -58,24 +60,18 @@ const renderCells = () => {
       boardDiv.appendChild(cell);
     }
   }
-  cells = document.querySelectorAll("#board > div");
-
-  for (let i = 0; i < cells.length; i++) {
-    const cell = cells[i];
-    cell.addEventListener("click", clickCellHandler);
-  }
 };
 
-const clickCellHandler = (event) => {
+const clickBoardHandler = (event) => {
   if (currentPlayer !== "Joueur") {
     return;
   }
-  const row = event.currentTarget.getAttribute("row");
-  const line = event.currentTarget.getAttribute("line");
-  if (board[row][line] !== "") {
+  const row = event.target.getAttribute("row");
+  const col = event.target.getAttribute("col");
+  if (board[row][col] !== "") {
     return;
   }
-  board[row][line] = joueurSymbol;
+  board[row][col] = joueurSymbol;
   renderCells();
   switchPlayer();
   turnNumber++;
@@ -88,11 +84,47 @@ const switchPlayer = () => {
 const IAplays = () => {
   if (turnNumber === 0) {
     board[1][1] = IASymbol;
+    // si le centre est libre
+  } else if (board[1][1] === "") { 
+      board[1][1] = IASymbol;
+  } else {
+    // check les diagonales
+
+      if () { 
+
+    }
+    
   }
   renderCells();
   switchPlayer();
   turnNumber++;
 };
+
+const diagonalesLibres = () => {
+  const diagonales = []
+  if (board[0][0]) {
+    diagonales.push({
+      row: 0,
+      col:0,
+    })
+  } if (board[0][2]) {
+    diagonales.push({
+      row: 0,
+      col:2,
+    })
+  } if (board[2][0]) {
+    diagonales.push({
+      row: 2,
+      col:0,
+    })
+  } if (board[2][2]) {
+    diagonales.push({
+      row: 2,
+      col:2,
+    })
+  }
+  return diagonales
+}
 
 const launchGame = () => {
   board = initializeBoard();
