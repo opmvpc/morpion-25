@@ -4,11 +4,14 @@ const app = document.querySelector("#app");
 let board = null;
 let currentPlayer = null;
 let cells = null;
+let turnNumber = 0;
+const IASymbol = "O";
+const joueurSymbol = "X";
 
 const initializeBoard = () => [
-  ["0", "X", ""],
-  ["", "O", ""],
-  ["", "X", ""],
+  ["", "", ""],
+  ["", "", ""],
+  ["", "", ""],
 ];
 
 const firstToPlay = () => {
@@ -64,16 +67,43 @@ const renderCells = () => {
 };
 
 const clickCellHandler = (event) => {
-  board[event.currentTarget.getAttribute("row")][
-    event.currentTarget.getAttribute("line")
-  ] = "X";
+  if (currentPlayer !== "Joueur") {
+    return;
+  }
+  const row = event.currentTarget.getAttribute("row");
+  const line = event.currentTarget.getAttribute("line");
+  if (board[row][line] !== "") {
+    return;
+  }
+  board[row][line] = joueurSymbol;
   renderCells();
+  switchPlayer();
+  turnNumber++;
+};
+
+const switchPlayer = () => {
+  currentPlayer = currentPlayer === "IA" ? "Joueur" : "IA";
+};
+
+const IAplays = () => {
+  if (turnNumber === 0) {
+    board[1][1] = IASymbol;
+  }
+  renderCells();
+  switchPlayer();
+  turnNumber++;
 };
 
 const launchGame = () => {
   board = initializeBoard();
   renderBoard();
   renderCells();
+  firstToPlay();
+  console.log(currentPlayer);
+
+  if (currentPlayer === "IA") {
+    IAplays();
+  }
 };
 
 launchGame();
