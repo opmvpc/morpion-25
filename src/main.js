@@ -91,7 +91,8 @@ const checkWinner = () => {
 };
 
 const showWinner = (winner) => {
-  alert(`Gagnant : ${winner}`);
+  document.querySelector("#info").textContent =
+    winner === "IA" ? "Vous avez perdu 😭" : "C'est gagné ! C'est gagné ! 🎆";
 };
 
 const renderBoard = () => {
@@ -99,7 +100,7 @@ const renderBoard = () => {
     <header>
       <h1>Morpion</h1>
     </header>
-    <div id="">
+    <div id="info">
 
     </div>
     <div id="board">
@@ -150,6 +151,9 @@ const clickBoardHandler = async (event) => {
   renderCells();
   await sleep(50);
   checkWinner();
+  if (isWon) {
+    return;
+  }
   switchPlayer();
   turnNumber++;
   await IAplays();
@@ -159,6 +163,14 @@ const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const switchPlayer = () => {
   currentPlayer = currentPlayer === "IA" ? "Joueur" : "IA";
+  showPlayerMessage();
+};
+
+const showPlayerMessage = () => {
+  document.querySelector("#info").textContent =
+    currentPlayer === "IA"
+      ? "L'IA est en train de réfléchir ⌛"
+      : "C'est à votre tour !";
 };
 
 const IAplays = async () => {
@@ -266,6 +278,7 @@ const launchGame = () => {
   renderBoard();
   renderCells();
   firstToPlay();
+  showPlayerMessage();
 
   if (currentPlayer === "IA") {
     IAplays();

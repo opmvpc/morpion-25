@@ -34,3 +34,29 @@ h1 {
 #board > div:not(:nth-child(3n + 1)) {
   border-left: 5px solid #000;
 }
+
+#restart {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#restart > button {
+  background-color: gainsboro;
+  border: grey solid 1px;
+  border-radius: 5px;
+  padding: 5px 10px 5px 10px;
+  cursor: pointer;
+}
+
+#restart > button:hover {
+  filter: brightness(105%);
+}
+
+#info {
+  font-size: 1.2rem;
+  height: 20px;
+  margin-bottom: 12px;
+  text-align: center;
+}
