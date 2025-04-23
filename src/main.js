@@ -103,9 +103,17 @@ const renderBoard = () => {
 
     </div>
     <div id="board">
-    </div>`;
+    </div>
+
+    <div id="restart">
+      <button>Relancer</button>
+    </div>
+    `;
 
   document.querySelector("#board").addEventListener("click", clickBoardHandler);
+  document
+    .querySelector("#restart > button")
+    .addEventListener("click", () => launchGame());
 };
 
 const renderCells = () => {
@@ -126,7 +134,7 @@ const renderCells = () => {
   }
 };
 
-const clickBoardHandler = (event) => {
+const clickBoardHandler = async (event) => {
   if (isWon) {
     return;
   }
@@ -140,20 +148,27 @@ const clickBoardHandler = (event) => {
   }
   board[row][col] = joueurSymbol;
   renderCells();
+  await sleep(50);
+  checkWinner();
   switchPlayer();
   turnNumber++;
-  checkWinner();
-  IAplays();
+  await IAplays();
 };
+
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const switchPlayer = () => {
   currentPlayer = currentPlayer === "IA" ? "Joueur" : "IA";
 };
 
-const IAplays = () => {
+const IAplays = async () => {
   if (isWon) {
-    false;
+    return;
   }
+
+  const sleepTime = Math.random() * 2000 + 500;
+  await sleep(sleepTime);
+
   if (turnNumber === 0) {
     board[1][1] = IASymbol;
     // si le centre est libre
@@ -180,6 +195,7 @@ const IAplays = () => {
     }
   }
   renderCells();
+  await sleep(50);
   switchPlayer();
   turnNumber++;
   checkWinner();
@@ -245,6 +261,7 @@ const medianesLibres = () => {
 };
 
 const launchGame = () => {
+  isWon = false;
   board = initializeBoard();
   renderBoard();
   renderCells();
